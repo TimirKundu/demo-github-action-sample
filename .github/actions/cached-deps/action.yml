@@ -1,0 +1,17 @@
+name: 'Get or Cache Dependencies'
+description: |
+  This action checks if the dependencies are already cached. If not, it installs them and caches them for future use.
+  This is useful for speeding up the workflow by avoiding unnecessary installations.
+runs:
+  using: 'composite'
+  steps:
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+        shell: bash
