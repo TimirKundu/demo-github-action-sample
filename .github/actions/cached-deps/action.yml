@@ -2,10 +2,16 @@ name: 'Get or Cache Dependencies'
 description: |
   This action checks if the dependencies are already cached. If not, it installs them and caches them for future use.
   This is useful for speeding up the workflow by avoiding unnecessary installations.
+inputs:
+  caching:
+    description: 'Enable or disable caching of dependencies'
+    required: false
+    default: 'true'
 runs:
   using: 'composite'
   steps:
       - name: Cache dependencies
+        if: ${{ inputs.caching == 'true' }}
         id: cache
         uses: actions/cache@v4
         with:
